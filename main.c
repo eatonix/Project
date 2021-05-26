@@ -6,6 +6,7 @@
 int main(void) {
 	int opcija;
 	char* klijenti = "klijenti.bin";
-	fileCheck(programeri, &brojKorisnika);
+	fileCheck(klijenti, &brojKlijenata);
+	izbornik(klijenti, &brojKlijenata);
 }
 
