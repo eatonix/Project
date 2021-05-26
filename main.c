@@ -6,6 +6,7 @@
 int main(void) {
 	int opcija;
 	char* klijenti = "klijenti.bin";
+	unsigned int brojKlijenata = 0;
 	printf("|******************************************\
                 \n             Dobrodosli!                 \
                 \n Odaberite opciju koju zelite izvrsiti:  \
