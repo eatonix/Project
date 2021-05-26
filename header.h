@@ -9,7 +9,7 @@ typedef struct klijenti {
 	char email[50];
 }KLIJENTI;
 
-void stvaranjeDatoteke(void);
+void stvaranjeDatoteke(char*, unsigned int*);
 void dodavanjeKlijenata(char*, unsigned int*);
 void pregledKlijenata(char*, unsigned int*));
 void search(char*, unsigned int*);
