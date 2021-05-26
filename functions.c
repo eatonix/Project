@@ -149,6 +149,18 @@ void search(char* file, unsigned int* pBrojKlijenata) {
 		}
 	}
 }
+
+void izlaz(void) {
+	system("cls");
+	printf("Da li ste sigurni da zelite zavrsiti program?\n");
+	char odabir [3] = { '\0' };
+	scanf(" %2s", odabir);
+	if (!strcmp("da", odabir)) {
+		exit(EXIT_FAILURE);
+	}
+
+	return;
+}
 void izbornik(char* file, unsigned int* pBrojKlijenata){
 	
 	unsigned int brojKlijenata = 0;
@@ -179,15 +191,4 @@ void izbornik(char* file, unsigned int* pBrojKlijenata){
 	default:
 		printf("Krivi odabir!\n");
 		
-}
-void izlaz(void) {
-	system("cls");
-	printf("Da li ste sigurni da zelite zavrsiti program?\n");
-	char odabir [3] = { '\0' };
-	scanf(" %2s", odabir);
-	if (!strcmp("da", odabir)) {
-		exit(EXIT_FAILURE);
-	}
-
-	return;
 }
