@@ -5,7 +5,7 @@
 
 int main(void) {
 	int opcija;
-	char imeDatoteke[] = { "C:\\users\\student\\klijenti.bin" };
+	char* klijenti = "klijenti.bin";
 	printf("|******************************************\
                 \n             Dobrodosli!                 \
                 \n Odaberite opciju koju zelite izvrsiti:  \
