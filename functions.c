@@ -74,4 +74,87 @@ void dodavanjeKlijenata(FILE* fp){
 
 	return;
 }
+void pregledKlijenata(FILE* fp) {
+
+	int n;
+	int x = 0;
+	
+	fread(&x, sizeof(int), 1, fp);
+	fclose(fp);
+
+	KLIJENT* klijenti = NULL;
+	klijenti = (KLIJENT*)calloc(x, sizeof(KLIJENT));
+	if (klijenti == NULL) {
+		return NULL;
+	}
+	else {
+		char odabrano[51];
+
+		printf("Zelim:");
+		printf("\n 1 sortirati studente A-Z.");
+		printf("\n 2 sortirati studente Z-A.");
+		printf("\n 3 pronaci odredenog studenta.");
+		printf("\n 4 vratiti se na izbornik.");
+		printf("\n\nOdaberite broj: ");
+		scanf("%d", &n);
+		system("cls");
+		while (1) {
+
+			switch (n) {
+
+			case 1:
+				//sortiranjeAZ(klijenti, x);
+				break;
+
+			case 2:
+				//sortiranjeZA(ime);
+				break;
+
+			case 3:
+				search(fp);
+				break;
+
+			case 4:
+				choice1();
+				break;
+
+			default:
+				printf("1, 2, 3 ili 4.");
+			}
+		}
+		return;
+	}
+}
+void search(FILE* fp) {
+
+	int num;
+	int i;
+
+	if (fp == NULL) {
+		perror("Datoteka se ne moze otvoriti");
+		return;
+	}
+	else {
+		fseek(fp, 0, SEEK_SET);
+		fread(&num, sizeof(int), 1, fp);
+
+		char tempName[51] = { '\0' };
+
+		printf("\n Upisite ime i prezime klijenta: ");
+		scanf("%30s", tempName);
+
+		for (i = 0; i < num; i++) {
+			fread(&student, sizeof(STUDENT), 1, fp);
+
+			if (strcmp(student.name, tempName) == 0) {
+				for (int j = 0; j < klijenti.broj_klijenata; j++) {
+					printf("%c ", klijenti.email[j]);
+					printf("%d ", broj_mobitela[j]);
+				}
+			}
+		}
+	}
+}
+
+
 
