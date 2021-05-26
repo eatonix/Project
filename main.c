@@ -8,5 +8,6 @@ int main(void) {
 	char* klijenti = "klijenti.bin";
 	fileCheck(klijenti, &brojKlijenata);
 	izbornik(klijenti, &brojKlijenata);
+	return 0;
 }
 
