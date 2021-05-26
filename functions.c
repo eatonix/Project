@@ -143,7 +143,7 @@ void search(char* file, unsigned int* pBrojKlijenata) {
 			if (strcmp(student.name, tempName) == 0) {
 				for (int j = 0; j < klijenti.broj_klijenata; j++) {
 					printf("%c ", klijenti.email[j]);
-					printf("%d ", broj_mobitela[j]);
+					printf("%d ", klijenti.broj_mobitela[j]);
 				}
 			}
 		}
