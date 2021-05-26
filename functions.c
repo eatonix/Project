@@ -32,3 +32,46 @@ void stvaranjeDatoteke(void) {
 			exit(EXIT_FAILURE);
 	}
 	
+	
+
+void dodavanjeKlijenata(FILE* fp){
+
+    int i;
+	int* x;
+	x = (int*)calloc(1, sizeof(int));
+	*x = 0;
+	int n = 0;
+	
+	fseek(fp, 0, SEEK_SET);
+	fread(&x, sizeof(int), 1, fp);
+
+	printf("Koliko klijenata zelite dodati?");
+	scanf("%d", &n);
+
+	KLIJENT* newClients = NULL;
+	newClients = (KLIJENT*)calloc(n, sizeof(KLIJENT));
+
+	fseek(fp, 0, SEEK_END);
+	
+
+	for(i = 0; i < n; i++){
+
+		printf("%d. klijent:\n", i + 1);
+		printf("Ime: ");
+		scanf("%s", (newClients + i)->ime);
+		printf("Prezime: ");
+		scanf("%s", (newClients + i)->prezime);
+		(newClients + i)->broj_klijenata = 0;
+	}
+	*(x) += n;
+
+	fwrite(newClients, sizeof(KLIJENT), n, fp);
+	fseek(fp, 0, SEEK_SET);
+	fwrite(&x, sizeof(int), 1, fp);
+	free(x);
+	free(newClients);
+	fclose(fp);
+
+	return;
+}
+
