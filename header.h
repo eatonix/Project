@@ -11,7 +11,7 @@ typedef struct klijenti {
 
 void provjeraDatoteke(char*, unsigned int*);
 void dodavanjeKlijenata(char*, unsigned int*);
-void pregledKlijenata(char*, unsigned int*));
+void pregledKlijenata(char*, unsigned int*);
 void search(char*, unsigned int*);
 
-#endif
+#endif HEADER_H
