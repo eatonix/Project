@@ -22,7 +22,7 @@ int main(void) {
 		}
 	} while (opcija < 1 || opcija > 5);
 	switch (opcija) {
-	case 1:
+	case '1':
 		unosKlijenta();
 		break;
 	}
