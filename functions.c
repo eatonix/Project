@@ -159,10 +159,9 @@ void izbornik(char* file, unsigned int* pBrojKlijenata){
 	printf("|******************************************\
                 \n             Dobrodosli!                 \
                 \n Odaberite opciju koju zelite izvrsiti:  \
-                \n\n(1)Dodavanje novog klijenta\
+                \n(1)Unos novog klijenta\
                 \n(2)Pretraga klijenta\
-                \n(3)Ispis svih klijenata\
-                \n(5)Zavrsetak programa\
+                \n(3)Zavrsetak programa\
                 \n******************************************|\n");
 
 	do {
@@ -172,8 +171,14 @@ void izbornik(char* file, unsigned int* pBrojKlijenata){
 		}
 	} while (opcija < 1 || opcija > 5);
 	switch (opcija) {
-	case '1':
-		unosKlijenta();
+	case 1:
+		unosKlijenta(char*, unsigned int*);
 		break;
 	}
+	case 2:
+		pregledKlijenata(char*, unsigned int*);
+		break;
+	default:
+		printf("Krivi odabir!\n");
+		
 }
