@@ -1,4 +1,3 @@
-
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
@@ -175,7 +174,20 @@ void izbornik(char* file, unsigned int* pBrojKlijenata){
 	case 2:
 		pregledKlijenata(char*, unsigned int*);
 		break;
+	case 5:
+		izlaz(void);
 	default:
 		printf("Krivi odabir!\n");
 		
+}
+void izlaz(void) {
+	system("cls");
+	printf("Da li ste sigurni da zelite zavrsiti program?\n");
+	char odabir [3] = { '\0' };
+	scanf(" %2s", odabir);
+	if (!strcmp("da", odabir)) {
+		exit(EXIT_FAILURE);
+	}
+
+	return;
 }
