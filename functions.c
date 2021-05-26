@@ -6,7 +6,7 @@
 #include <string.h>
 #include "Header.h"
 
-void stvaranjeDatoteke(void) {
+void provjeraDatoteke(void) {
 	int podatak = 0;
 	FILE* fp = NULL;
 	fp = fopen("klijenti.bin", "rb+");
@@ -31,8 +31,6 @@ void stvaranjeDatoteke(void) {
 			perror("Dodavanje clana (greska)");
 			exit(EXIT_FAILURE);
 	}
-	
-	
 
 void dodavanjeKlijenata(FILE* fp){
 
