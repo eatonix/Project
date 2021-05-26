@@ -71,53 +71,53 @@ void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata){
 }
 void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 
-	int n;
-	int x = 0;
-	
-	fread(&x, sizeof(int), 1, fp);
-	fclose(fp);
+	system("cls");
 
-	KLIJENT* klijenti = NULL;
-	klijenti = (KLIJENT*)calloc(x, sizeof(KLIJENT));
-	if (klijenti == NULL) {
-		return NULL;
+	FILE* pDatotekaIspis = NULL;
+	pDatotekadIspis = fopen(file, "rb");
+
+	if (pDatotekaIspis == NULL) {
+
+		perror("Izbor 2");
+		return;
+		//exit(EXIT_FAILURE);
 	}
 	else {
-		char odabrano[51];
 
-		printf("Zelim:");
-		printf("\n 1 sortirati studente A-Z.");
-		printf("\n 2 sortirati studente Z-A.");
-		printf("\n 3 pronaci odredenog studenta.");
-		printf("\n 4 vratiti se na izbornik.");
-		printf("\n\nOdaberite broj: ");
-		scanf("%d", &n);
-		system("cls");
-		while (1) {
+		KLIJENTI* clients = NULL;
 
-			switch (n) {
+		fread(pBrojKlijenata, sizeof(unsigned int), 1, pDatotekaIspis);
 
-			case 1:
-				//sortiranjeAZ(klijenti, x);
-				break;
+		if (*pBrojKlijenata == 0) {
 
-			case 2:
-				//sortiranjeZA(ime);
-				break;
+			printf("Nema clanova\n");
+			fclose(pDatotekaIspis);
+			return;
+		}
+		else {
 
-			case 3:
-				search(fp);
-				break;
+			clients = (KLIJENTI*)calloc(*pBrojKlijenata, sizeof(KLIJENTI));
 
-			case 4:
-				choice1();
-				break;
+			if (clients == NULL) {
 
-			default:
-				printf("1, 2, 3 ili 4.");
+				perror("Citanje klijenata");
+				exit(EXIT_FAILURE);
+			}
+			else {
+
+				fread(clients, sizeof(KLIJENTI), *pBrojKlijenata, pDatotekaIspis);
+				fclose(pDatotekaIspis);
+
+				for (int i = 0; i < *pBrojKlijenata; i++)
+				{
+					printf("%s ", (Developeri + i)->ime);
+					printf("%s ", (Developeri + i)->prezime);
+					printf("%s ", (Developeri + i)->brojMobitela);
+					printf("%s ", (Developeri + i)->email);
+					printf("\n");
+				}
 			}
 		}
-		return;
 	}
 }
 void search(char* file, unsigned int* pBrojKlijenata) {
