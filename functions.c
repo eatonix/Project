@@ -70,8 +70,6 @@ void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
 }
 void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 
-	system("cls");
-
 	FILE* pDatotekaIspis = NULL;
 	pDatotekaIspis = fopen(file, "rb");
 
@@ -117,32 +115,37 @@ void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 	scanf("%s", izbor);
 }
 
-void menu(char* file, unsigned int* pBrojKlijenata) {
-	system("cls");
-	int opcija;
-	while (1) {
-		printf("|******************************************\
-                \n             Dobrodosli!                 \
-                \n Odaberite opciju koju zelite izvrsiti:  \
-                \n(1)Unos novog klijenta\
-                \n(2)Pretraga klijenta\
-                \n(3)Zavrsetak programa\
-                \n******************************************|\n");
-		scanf("%d", &opcija);
-		switch (opcija) {
-		case 1:
-			dodavanjeKlijenata(file, pBrojKlijenata);
-			break;
-		case 2:
-			ispisKlijenata(file, pBrojKlijenata);
-			break;
-		case 5:
-			system("cls");
-			izlaz();
-		default:
-			printf("\nPritisnite bilo koju tipku za povratak...");
-			_getch();
+void brisanjeDatoteke(char* file) {
 
+	FILE* pDatotekaObrisi = NULL;
+	pDatotekaObrisi = fopen(file, "rb");
+
+	if (pDatotekaObrisi == NULL) {
+
+		perror("Izbornik 2 - Citanje datoteke");
+		return;
+		//exit(EXIT_FAILURE);
+	}
+	else {
+		printf("\n   ================================================\n\n");
+		printf("            Brisanje datoteke\n");
+		printf("\n   ================================================\n\n");
+
+		printf("       Zelite li obrisati datoteku kupci.bin?");
+		printf("\n\n	1. Da");
+		printf("\n	2. Ne");
+
+		int izbor = -1;
+
+		printf("\n\nUnesite izbor: ");
+		scanf("%d", &izbor);
+		fclose(pDatotekaObrisi);
+		switch (izbor) {
+		case 1:
+			remove(file);
+			exit(EXIT_FAILURE);
+		case 2:
+			break;
 		}
 	}
 }
@@ -154,4 +157,41 @@ void izlaz(void) {
 		exit(EXIT_FAILURE);
 	}
 	return;
+}
+void menu(char* file, unsigned int* pBrojKlijenata) {
+	system("cls");
+	int opcija;
+	while (1) {
+		printf("|******************************************\
+                \n             Dobrodosli!                 \
+                \n Odaberite opciju koju zelite izvrsiti:  \
+                \n(1)Unos novog klijenta\
+                \n(2)Ispis svih klijenata\
+                \n(5)Brisanje datoteke s klijentima\
+				\n(0)Zavrsetak programa\
+                \n******************************************|\n");
+		scanf("%d", &opcija);
+		switch (opcija) {
+		case 1:
+			system("cls");
+			dodavanjeKlijenata(file, pBrojKlijenata);
+			break;
+		case 2:
+			system("cls");
+			ispisKlijenata(file, pBrojKlijenata);
+			break;
+		case 5: 
+			system("cls");
+			brisanjeDatoteke(file);
+			break;
+		case 0:
+			system("cls");
+			izlaz();
+		default:
+			system("cls");
+			printf("\nPritisnite bilo koju tipku za povratak...");
+			_getch();
+
+		}
+	}
 }
