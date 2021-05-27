@@ -87,7 +87,6 @@ void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
 	}
 
 	free(dodavanjeKlijenata);
-	return 0;
 }
 
 void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
@@ -132,7 +131,7 @@ void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 		}
 	}
 	char izbor[11];
-	printf("\n\n\n          Za povratak na izbornik unesite bilo koji broj:  ");
+	printf("\n\n\n          Za povratak na izbornik unesite bilo koji znak:  ");
 	scanf("%s", izbor);
 }
 
