@@ -13,5 +13,6 @@ void provjeraDatoteke(char*, unsigned int*);
 void dodavanjeKlijenata(char*, unsigned int*);
 void ispisKlijenata(char*, unsigned int*);
 void izlaz(void);
+void brisanjeDatoteke(char* file);
 
 #endif HEADER_H
