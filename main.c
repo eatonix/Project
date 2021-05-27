@@ -9,7 +9,9 @@ int main(void) {
 	char* klijenti = "klijenti.bin";
 	unsigned int brojKlijenata = 1;
 	provjeraDatoteke(klijenti, &brojKlijenata);
+	void brisanjeDatoteke(char* file);
 	menu(klijenti, &brojKlijenata);
+
 
 	return 0;
 }
