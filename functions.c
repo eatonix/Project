@@ -37,37 +37,59 @@ void provjeraDatoteke(char* file, unsigned int* pBrojKlijenata) {
 }
 
 void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
-
-	FILE* unosUDatoteku = NULL;
-	unosUDatoteku = fopen(file, "rb+");
-
-	if (unosUDatoteku == NULL) {
-		perror("Greska dodavanja novog clana u datoteku\n");
-		return;
+	FILE* fileP = NULL;
+	KLIJENTI* dodavanjeKlijenata = NULL;
+	dodavanjeKlijenata = (KLIJENTI*)malloc(sizeof(KLIJENTI));
+	int broj_klijenata;
+	if (dodavanjeKlijenata == NULL) {
+		return 1;
 	}
 	else {
-		KLIJENTI unosKlijenta = { 0 };
 		printf("\n\n   ================================================\n\n");
 		printf("          Unos novih korisnickih racuna\n");
 		printf("\n   ================================================\n\n");
 		printf("          Unesite podatke o korisniku:\n\n");
 		printf("          Ime: ");
-		scanf("%25s", unosKlijenta.ime);
+		scanf("%25s", dodavanjeKlijenata->ime);
 		printf("          Prezime: ");
-		scanf("%25s", unosKlijenta.prezime);
+		scanf("%25s", dodavanjeKlijenata->prezime);
 		printf("          Broj mobitela: ");
 		char privremeniBroj[10] = { '\0' };
 		scanf("%9s", privremeniBroj);
-		strcpy(unosKlijenta.broj_mobitela, "+385");
-		strcat(unosKlijenta.broj_mobitela, privremeniBroj);
+		strcpy(dodavanjeKlijenata->broj_mobitela, "+385");
+		strcat(dodavanjeKlijenata->broj_mobitela, privremeniBroj);
 
-		fseek(unosUDatoteku, sizeof(unsigned int) + ((*pBrojKlijenata - 1) * sizeof(KLIJENTI)), SEEK_SET);
-		fwrite(&unosKlijenta, sizeof(KLIJENTI), 1, unosUDatoteku);
-		rewind(unosUDatoteku);
-		fwrite(pBrojKlijenata, sizeof(unsigned int), 1, unosUDatoteku);
-		fclose(unosUDatoteku);
+		fileP = fopen("klijenti.bin", "rb");
+		if (fileP == NULL) {
+			fileP = fopen("klijenti.bin", "wb");
+			broj_klijenata = 1;
+			fwrite(&broj_klijenata, sizeof(int), 1, fileP);
+			fwrite(dodavanjeKlijenata, sizeof(KLIJENTI), 1, fileP);
+			fclose(fileP);
+		}
+		else {
+			fclose(fileP);
+			fileP = fopen("klijenti.bin", "rb+");
+			if (fileP == NULL) {
+				return 1;
+			}
+			else {
+				fseek(fileP, 0, SEEK_SET);
+				fread(&broj_klijenata, sizeof(int), 1, fileP);
+				broj_klijenata++;
+				fseek(fileP, 0, SEEK_SET);
+				fwrite(&broj_klijenata, sizeof(int), 1, fileP);
+				fseek(fileP, 0, SEEK_END);
+				fwrite(dodavanjeKlijenata, sizeof(KLIJENTI), 1, fileP);
+				fclose(fileP);
+			}
+		}
 	}
+
+	free(dodavanjeKlijenata);
+	return 0;
 }
+
 void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 
 	FILE* pDatotekaIspis = NULL;
