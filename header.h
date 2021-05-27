@@ -6,7 +6,6 @@ typedef struct klijenti {
 	char ime[25];
 	char prezime[25];
 	char broj_mobitela[20];
-	char email[25];
 }KLIJENTI;
 
 void provjeraDatoteke(char*, unsigned int*);
