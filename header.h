@@ -1,4 +1,3 @@
-
 #ifndef HEADER_H
 #define HEADER_H
 
@@ -13,6 +12,6 @@ typedef struct klijenti {
 void provjeraDatoteke(char*, unsigned int*);
 void dodavanjeKlijenata(char*, unsigned int*);
 void ispisKlijenata(char*, unsigned int*);
-void search(char*, unsigned int*);
+void izlaz(void);
 
 #endif HEADER_H
