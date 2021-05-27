@@ -124,7 +124,6 @@ void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 						printf("%s ", (sviKlijenti + i)->ime);
 						printf("%s ", (sviKlijenti + i)->prezime);
 						printf("%s ", (sviKlijenti + i)->broj_mobitela);
-						printf("%s ", (sviKlijenti + i)->email);
 						printf("\n");
 					}
 				}
