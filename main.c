@@ -11,6 +11,7 @@ int main(void) {
 	provjeraDatoteke(klijenti, &brojKlijenata);
 	void brisanjeDatoteke(char* file);
 	menu(klijenti, &brojKlijenata);
+	
 
 
 	return 0;
