@@ -7,6 +7,7 @@ typedef struct klijenti {
 	char ime[25];
 	char prezime[25];
 	char broj_mobitela[20];
+	char datum_placanja[20];
 }KLIJENTI;
 
 void provjeraDatoteke(char*, unsigned int*);
@@ -14,7 +15,8 @@ void dodavanjeKlijenata(char*, unsigned int*);
 void ispisKlijenata(char*, unsigned int*);
 void izlaz(void);
 void brisanjeDatoteke(char* file);
-void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata);
+void pretragaPoImenu(char* file, unsigned int* brojKlijenata);
+void izmjenaPodataka(char* file , unsigned int* brojKlijenata);
 
 #endif HEADER_H
 
