@@ -6,7 +6,7 @@
 #include <conio.h>
 #include "Header.h"
 
-void provjeraDatoteke(char* file, unsigned int* pBrojKlijenata) {
+void provjeraDatoteke(char* file, unsigned int* brojKlijenata) {
 
 	FILE* fp = fopen(file, "rb");
 
@@ -23,20 +23,20 @@ void provjeraDatoteke(char* file, unsigned int* pBrojKlijenata) {
 		}
 		else {
 
-			fwrite(pBrojKlijenata, sizeof(unsigned int), 1, fp);
+			fwrite(brojKlijenata, sizeof(unsigned int), 1, fp);
 			fclose(fp);
 			printf("Datoteka kreirana\n");
 		}
 	}
 	else {
 
-		fread(pBrojKlijenata, sizeof(unsigned int), 1, fp);
+		fread(brojKlijenata, sizeof(unsigned int), 1, fp);
 		printf("\nDatoteka postoji");
 		fclose(fp);
 	}
 }
 
-void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
+void dodavanjeKlijenata(char* file, unsigned int* brojKlijenata) {
 	FILE* fileP = NULL;
 	KLIJENTI* dodavanjeKlijenata = NULL;
 	dodavanjeKlijenata = (KLIJENTI*)malloc(sizeof(KLIJENTI));
@@ -53,12 +53,14 @@ void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
 		scanf("%25s", dodavanjeKlijenata->ime);
 		printf("          Prezime: ");
 		scanf("%25s", dodavanjeKlijenata->prezime);
-		printf("          Broj mobitela: ");
+		printf("          Broj mobitela: +385");
 		char privremeniBroj[10] = { '\0' };
 		scanf("%9s", privremeniBroj);
 		strcpy(dodavanjeKlijenata->broj_mobitela, "+385");
 		strcat(dodavanjeKlijenata->broj_mobitela, privremeniBroj);
-		dodavanjeKlijenata->id = (*pBrojKlijenata)++;
+		printf("          Datum placanja clanarine: ");
+		scanf("%25s", dodavanjeKlijenata->datum_placanja);
+		dodavanjeKlijenata->id = (*brojKlijenata)++;
 
 		fileP = fopen("klijenti.bin", "rb");
 		if (fileP == NULL) {
@@ -90,40 +92,42 @@ void dodavanjeKlijenata(char* file, unsigned int* pBrojKlijenata) {
 	free(dodavanjeKlijenata);
 }
 
-void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
+void ispisKlijenata(char* file, unsigned int* brojKlijenata) {
 
-	FILE* pDatotekaIspis = NULL;
-	pDatotekaIspis = fopen(file, "rb");
+	FILE* ispisDatoteke = NULL;
+	ispisDatoteke = fopen(file, "rb");
 
-	if (pDatotekaIspis == NULL) {
+	if (ispisDatoteke == NULL) {
 		perror("Izbor 2");
 		return;
 	}
 	else {
 		KLIJENTI* sviKlijenti = NULL;
 
-		fread(pBrojKlijenata, sizeof(unsigned int), 1, pDatotekaIspis);
+		fread(brojKlijenata, sizeof(unsigned int), 1, ispisDatoteke);
 
-		if (*pBrojKlijenata == 0) {
+		if (*brojKlijenata == 0) {
 			printf("Nema unesenih clanova\n");
-			fclose(pDatotekaIspis);
+			fclose(ispisDatoteke);
 			return;
 		}
 		else {
-			sviKlijenti = (KLIJENTI*)calloc(*pBrojKlijenata, sizeof(KLIJENTI));
+			sviKlijenti = (KLIJENTI*)calloc(*brojKlijenata, sizeof(KLIJENTI));
 			if (sviKlijenti == NULL) {
 				perror("Citanje svih klijenata");
 				exit(EXIT_FAILURE);
 			}
 			else {
-				fread(sviKlijenti, sizeof(KLIJENTI), *pBrojKlijenata, pDatotekaIspis);
-				fclose(pDatotekaIspis);
+				fread(sviKlijenti, sizeof(KLIJENTI), *brojKlijenata, ispisDatoteke);
+				fclose(ispisDatoteke);
 
-				for (int i = 0; i < *pBrojKlijenata; i++) {
-					{
-						printf("%s ", (sviKlijenti + i)->ime);
-						printf("%s ", (sviKlijenti + i)->prezime);
-						printf("%s ", (sviKlijenti + i)->broj_mobitela);
+				for (int i = 0; i < *brojKlijenata; i++) {
+					if (i != 0) {
+						printf("%s \n", (sviKlijenti + i)->id);
+						printf("Ime: %s \n", (sviKlijenti + i)->ime);
+						printf("Prezime: %s \n", (sviKlijenti + i)->prezime);
+						printf("Broj mobitela: %s \n", (sviKlijenti + i)->broj_mobitela);
+						printf("Datum placanja clanarine: %s \n", (sviKlijenti + i)->datum_placanja);
 						printf("\n");
 					}
 				}
@@ -131,9 +135,9 @@ void ispisKlijenata(char* file, unsigned int* pBrojKlijenata) {
 			}
 		}
 	}
-	char izbor[11];
-	printf("\n\n\n          Za povratak na izbornik unesite bilo koji znak:  ");
-	scanf("%s", izbor);
+	printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+	while (getchar() != '\n'); // option TWO to clean stdin
+	getchar(); // wait for ENTER
 }
 
 void brisanjeDatoteke(char* file) {
@@ -153,8 +157,8 @@ void brisanjeDatoteke(char* file) {
 		printf("\n   ================================================\n\n");
 
 		printf("       Zelite li obrisati datoteku kupci.bin?");
-		printf("\n\n	1. Da");
-		printf("\n	2. Ne");
+		printf("\n\n	(1.) Da");
+		printf("\n	(2.) Ne");
 
 		int izbor = -1;
 
@@ -170,7 +174,7 @@ void brisanjeDatoteke(char* file) {
 		}
 	}
 }
-void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
+void pretragaPoImenu(char* file, unsigned int* brojKlijenata) {
 
 	FILE* pDatotekaProcitaj = NULL;
 	pDatotekaProcitaj = fopen(file, "rb");
@@ -184,9 +188,9 @@ void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
 
 		KLIJENTI* sviKlijenti = NULL;
 
-		fread(pBrojKlijenata, sizeof(unsigned int), 1, pDatotekaProcitaj);
+		fread(brojKlijenata, sizeof(unsigned int), 1, pDatotekaProcitaj);
 
-		if (*pBrojKlijenata == 0) {
+		if (*brojKlijenata == 0) {
 
 			printf("          Nema unesenih clanova!\n");
 			fclose(pDatotekaProcitaj);
@@ -194,7 +198,7 @@ void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
 		}
 		else {
 
-			sviKlijenti = (KLIJENTI*)calloc(*pBrojKlijenata, sizeof(KLIJENTI));
+			sviKlijenti = (KLIJENTI*)calloc(*brojKlijenata, sizeof(KLIJENTI));
 
 			if (sviKlijenti == NULL) {
 
@@ -203,7 +207,7 @@ void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
 			}
 			else {
 
-				fread(sviKlijenti, sizeof(KLIJENTI), *pBrojKlijenata, pDatotekaProcitaj);
+				fread(sviKlijenti, sizeof(KLIJENTI), *brojKlijenata, pDatotekaProcitaj);
 				fclose(pDatotekaProcitaj);
 
 				unsigned int i;
@@ -214,7 +218,7 @@ void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
 				unsigned int statusPronalaska = 0;
 				unsigned int indeksPronalaska = -1;
 
-				for (i = 0; i < *pBrojKlijenata; i++) {
+				for (i = 0; i < *brojKlijenata; i++) {
 
 					if (!strcmp((sviKlijenti + i)->ime, privremenoIme)) {
 						statusPronalaska = 1;
@@ -224,15 +228,112 @@ void pretragaPoImenu(char* file, unsigned int* pBrojKlijenata) {
 				if (statusPronalaska) {
 					system("cls");
 					printf("          Korisnik pronaden:\n\n");
-					printf("          %s ", (sviKlijenti + indeksPronalaska)->ime);
-					printf("          %s ", (sviKlijenti + indeksPronalaska)->prezime);
-					printf("          %s", (sviKlijenti + indeksPronalaska)->broj_mobitela);;
+					printf("Ime: %s\n", (sviKlijenti + indeksPronalaska)->ime);
+					printf("Prezime: %s\n", (sviKlijenti + indeksPronalaska)->prezime);
+					printf("Broj mobitela: %s\n", (sviKlijenti + indeksPronalaska)->broj_mobitela);;
 					int pom;
 					scanf("%d", &pom);
 				}
 				else {
 					int pom;
 					printf("Nepostojeci korisnik\n");
+					scanf("%d", &pom);
+				}
+				free(sviKlijenti);
+			}
+		}
+	}
+}
+void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
+
+	FILE* citanjeDatoteke = NULL;
+	citanjeDatoteke = fopen(file, "rb");
+
+	if (citanjeDatoteke == NULL) {
+
+		perror("Izbornik 2 - Citanje datoteke");
+		return;
+		//exit(EXIT_FAILURE);
+	}
+	else {
+
+		KLIJENTI* sviKlijenti = NULL;
+
+		fread(brojKlijenata, sizeof(unsigned int), 1, citanjeDatoteke);
+
+		if (*brojKlijenata == 0) {
+
+			printf("          Nema unesenih clanova!\n");
+			fclose(citanjeDatoteke);
+			return;
+		}
+		else {
+
+			sviKlijenti = (KLIJENTI*)calloc(*brojKlijenata, sizeof(KLIJENTI));
+
+			if (sviKlijenti == NULL) {
+
+				perror("          Citanje svih korisnika");
+				exit(EXIT_FAILURE);
+			}
+			else {
+
+				KLIJENTI privremeniKlijenti = { 0 };
+				fread(sviKlijenti, sizeof(KLIJENTI), *brojKlijenata, citanjeDatoteke);
+
+				unsigned int i;
+
+				printf("          Unesite ID trazenog korisnika: ");
+				int privremeniID = 0;
+				scanf("%d", &privremeniID);
+				unsigned int statusPronalaska = 0;
+				unsigned int indeksPronalaska = -1;
+
+				for (i = 0; i < *brojKlijenata; i++) {
+
+					if (privremeniID == (sviKlijenti + i)->id) {
+						statusPronalaska = 1;
+						indeksPronalaska = i;
+					}
+				}
+				if (statusPronalaska) {
+					system("cls");
+					printf("          Korisnik pronadjen:\n\n");
+					printf("          %u\t", (sviKlijenti + indeksPronalaska)->id);
+					printf("          %s ", (sviKlijenti + indeksPronalaska)->ime);
+					printf("          %s ", (sviKlijenti + indeksPronalaska)->prezime);
+					printf("          %s", (sviKlijenti + indeksPronalaska)->broj_mobitela);
+					fclose(citanjeDatoteke);
+					citanjeDatoteke = fopen(file, "rb+");
+
+					printf("\n   ================================================\n\n");
+					printf("          Izmjena podataka o korisniku\n");
+					printf("\n   ================================================\n\n");
+
+					printf("          Novo ime: ");
+					scanf(" %50[^\n]", privremeniKlijenti.ime);
+					printf("          Novo prezime: ");
+					scanf(" %50[^\n]", privremeniKlijenti.prezime);
+					printf("          Novi broj mobitela: ");
+					char privremeniBroj[10] = { '\0' };
+					scanf("%9s", privremeniBroj);
+					strcpy(privremeniKlijenti.broj_mobitela, "+385");
+					strcat(privremeniKlijenti.broj_mobitela, privremeniBroj);
+					privremeniKlijenti.id = indeksPronalaska;
+
+					fseek(citanjeDatoteke, sizeof(unsigned int) + ((indeksPronalaska) * sizeof(KLIJENTI)), SEEK_SET);
+					fwrite(&privremeniKlijenti, sizeof(KLIJENTI), 1, citanjeDatoteke);
+					rewind(citanjeDatoteke);
+					fwrite(brojKlijenata, sizeof(unsigned int), 1, citanjeDatoteke);
+					fclose(citanjeDatoteke);
+					int pom;
+					printf("\n\nPritisnite bilo koju tipku za nastavak: ");
+					scanf("%d", &pom);
+				}
+				else {
+					int pom;
+					printf("          Nepostojeci korisnik\n");
+					printf("\n\n          Unesite bilo koji broj za nastavak: ");
 					scanf("%d", &pom);
 				}
 				free(sviKlijenti);
@@ -250,7 +351,7 @@ void izlaz(void) {
 	}
 	return;
 }
-void menu(char* file, unsigned int* pBrojKlijenata) {
+void menu(char* file, unsigned int* brojKlijenata) {
 	system("cls");
 	int opcija;
 	while (1) {
@@ -260,6 +361,7 @@ void menu(char* file, unsigned int* pBrojKlijenata) {
                 \n(1)Unos novog klijenta\
                 \n(2)Ispis svih klijenata\
 				\n(3)Pretraga klijenta po imenu\
+				\n(4)Izmjena podataka o klijentima\
                 \n(5)Brisanje datoteke s klijentima\
 				\n(0)Zavrsetak programa\
                 \n******************************************|\n");
@@ -267,15 +369,19 @@ void menu(char* file, unsigned int* pBrojKlijenata) {
 		switch (opcija) {
 		case 1:
 			system("cls");
-			dodavanjeKlijenata(file, pBrojKlijenata);
+			dodavanjeKlijenata(file, brojKlijenata);
 			break;
 		case 2:
 			system("cls");
-			ispisKlijenata(file, pBrojKlijenata);
+			ispisKlijenata(file, brojKlijenata);
 			break;
 		case 3:
 			system("cls");
-			pretragaPoImenu(file, pBrojKlijenata);
+			pretragaPoImenu(file, brojKlijenata);
+			break;
+		case 4:
+			system("cls");
+			izmjenaPodataka(file, brojKlijenata);
 			break;
 		case 5: 
 			system("cls");
@@ -286,7 +392,7 @@ void menu(char* file, unsigned int* pBrojKlijenata) {
 			izlaz();
 		default:
 			system("cls");
-			printf("Stisnite [Enter] kako biste se vratili u izbornik.\n");
+			printf("Pritisnite [Enter] kako biste se vratili u izbornik.\n");
 			while(getchar()!='\n'); // option TWO to clean stdin
 			getchar(); // wait for ENTER
 
