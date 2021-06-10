@@ -46,27 +46,27 @@ void dodavanjeKlijenata(char* file, unsigned int* brojKlijenata) {
 		return;
 	}
 	else {
-		KLIJENTI unosClan = { 0 };
+		KLIJENTI unosKlijenata = { 0 };
 		printf("\n\n   ================================================\n\n");
 		printf("          Unos novih korisnickih racuna\n");
 		printf("\n   ================================================\n\n");
 		printf("          Unesite podatke o korisniku:\n\n");
 		printf("          Ime: ");
-		scanf("%21s", unosClan.ime);
+		scanf("%21s", unosKlijenata.ime);
 		printf("          Prezime: ");
-		scanf("%21s", unosClan.prezime);
+		scanf("%21s", unosKlijenata.prezime);
 		printf("          Broj mobitela: ");
 		char privremeniBroj[10] = { '\0' };
 		scanf("%9s", privremeniBroj);
-		strcpy(unosClan.broj_mobitela, "+385");
-		strcat(unosClan.broj_mobitela, privremeniBroj);
+		strcpy(unosKlijenata.broj_mobitela, "+385");
+		strcat(unosKlijenata.broj_mobitela, privremeniBroj);
 		printf("          Datum placanja clanarine: ");
-		scanf("%25s", unosClan.datum_placanja);
-		unosClan.id = (*brojKlijenata)++;
+		scanf("%25s", unosKlijenata.datum_placanja);
+		unosKlijenata.id = (*brojKlijenata)++;
 
 
 		fseek(unosUDatoteku, sizeof(unsigned int) + ((*brojKlijenata - 1) * sizeof(KLIJENTI)), SEEK_SET);
-		fwrite(&unosClan, sizeof(KLIJENTI), 1, unosUDatoteku);
+		fwrite(&unosKlijenata, sizeof(KLIJENTI), 1, unosUDatoteku);
 		rewind(unosUDatoteku);
 		fwrite(brojKlijenata, sizeof(unsigned int), 1, unosUDatoteku);
 		fclose(unosUDatoteku);
