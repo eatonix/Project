@@ -37,7 +37,7 @@ void provjeraDatoteke(char* file, unsigned int* brojKlijenata) {
 }
 
 void dodavanjeKlijenata(char* file, unsigned int* brojKlijenata) {
-	
+
 	FILE* unosUDatoteku = NULL;
 	unosUDatoteku = fopen(file, "rb+");
 
@@ -62,7 +62,7 @@ void dodavanjeKlijenata(char* file, unsigned int* brojKlijenata) {
 		strcat(unosKlijenata.broj_mobitela, privremeniBroj);
 		printf("          Datum placanja clanarine: ");
 		scanf("%25s", unosKlijenata.datum_placanja);
-		unosKlijenata.id = (*brojKlijenata)++;
+		unosKlijenata.ID = (*brojKlijenata)++;
 
 
 		fseek(unosUDatoteku, sizeof(unsigned int) + ((*brojKlijenata - 1) * sizeof(KLIJENTI)), SEEK_SET);
@@ -104,7 +104,7 @@ void ispisKlijenata(char* file, unsigned int* brojKlijenata) {
 
 				for (int i = 0; i < *brojKlijenata; i++) {
 					if (i != 0) {
-						//printf("ID: %s \n", (sviKlijenti + i)->id);
+						printf("ID: %u \n", (sviKlijenti + i)->ID);
 						printf("Ime: %s \n", (sviKlijenti + i)->ime);
 						printf("Prezime: %s \n", (sviKlijenti + i)->prezime);
 						printf("Broj mobitela: %s \n", (sviKlijenti + i)->broj_mobitela);
@@ -272,7 +272,7 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 
 				for (i = 0; i < *brojKlijenata; i++) {
 
-					if (privremeniID == (sviKlijenti + i)->id) {
+					if (privremeniID == (sviKlijenti + i)->ID) {
 						statusPronalaska = 1;
 						indeksPronalaska = i;
 					}
@@ -280,7 +280,7 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 				if (statusPronalaska) {
 					system("cls");
 					printf("          Korisnik pronadjen:\n\n");
-					printf("          %u\t", (sviKlijenti + indeksPronalaska)->id);
+					printf("          %u\t", (sviKlijenti + indeksPronalaska)->ID);
 					printf("          %s ", (sviKlijenti + indeksPronalaska)->ime);
 					printf("          %s ", (sviKlijenti + indeksPronalaska)->prezime);
 					printf("          %s", (sviKlijenti + indeksPronalaska)->broj_mobitela);
@@ -300,7 +300,7 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 					scanf("%9s", privremeniBroj);
 					strcpy(privremeniKlijenti.broj_mobitela, "+385");
 					strcat(privremeniKlijenti.broj_mobitela, privremeniBroj);
-					privremeniKlijenti.id = indeksPronalaska;
+					privremeniKlijenti.ID = indeksPronalaska;
 
 					fseek(citanjeDatoteke, sizeof(unsigned int) + ((indeksPronalaska) * sizeof(KLIJENTI)), SEEK_SET);
 					fwrite(&privremeniKlijenti, sizeof(KLIJENTI), 1, citanjeDatoteke);
