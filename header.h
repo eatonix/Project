@@ -2,7 +2,7 @@
 #define HEADER_H
 
 typedef struct klijenti {
-	int id;
+	unsigned int ID;
 	int broj_klijenata;
 	char ime[25];
 	char prezime[25];
@@ -16,7 +16,7 @@ void ispisKlijenata(char*, unsigned int*);
 void izlaz(void);
 void brisanjeDatoteke(char* file);
 void pretragaPoImenu(char* file, unsigned int* brojKlijenata);
-void izmjenaPodataka(char* file , unsigned int* brojKlijenata);
+void izmjenaPodataka(char* file, unsigned int* brojKlijenata);
 
 #endif HEADER_H
 
