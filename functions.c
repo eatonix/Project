@@ -6,6 +6,68 @@
 #include <conio.h>
 #include "Header.h"
 
+void sortiranje(char* file, unsigned int* brojKlijenata) {
+
+	FILE* citanjeDatoteke = NULL;
+	citanjeDatoteke = fopen(file, "rb");
+
+	if (citanjeDatoteke == NULL) {
+		printf("Citanje datoteke %s je neuspjesno", file);
+		return;
+	}
+	else {
+		fread(brojKlijenata, sizeof(unsigned int), 1, citanjeDatoteke);
+
+		if (*brojKlijenata == 0) {
+			printf("Popis je prazan, prvo unesite klijente kako bi ih sortirali!\n");
+			fclose(citanjeDatoteke);
+			return;
+		}
+
+		KLIJENTI* sviKlijenti = NULL;
+		KLIJENTI* temp = NULL;
+		sviKlijenti = (KLIJENTI*)calloc(*brojKlijenata, sizeof(KLIJENTI));
+		temp = (KLIJENTI*)calloc(*brojKlijenata, sizeof(KLIJENTI));
+
+		if (sviKlijenti == NULL || temp == NULL) {
+			perror("Greska!");
+			exit(EXIT_FAILURE);
+		}
+		else {
+			fread(sviKlijenti, sizeof(KLIJENTI), *brojKlijenata, citanjeDatoteke);
+			fclose(citanjeDatoteke);
+
+			for (unsigned int i = 0; i <= *brojKlijenata - 1; i++)
+				for (unsigned int j = i + 1; j <= (*brojKlijenata) - 1; j++) {
+					int num = atoi((sviKlijenti + i)->datum_placanja); //atoi mijenja string u integer
+					int num1 = atoi((sviKlijenti + j)->datum_placanja);
+					if (num > num1) {
+						memcpy(temp, (sviKlijenti + i), sizeof(KLIJENTI));
+						memcpy((sviKlijenti + i), (sviKlijenti + j), sizeof(KLIJENTI));
+						memcpy((sviKlijenti + j), temp, sizeof(KLIJENTI));
+					}
+				}
+		}
+		printf("\n   ================================================\n\n");
+		printf("          Uzlazno sortiranje po datumu placanja\n");
+		printf("\n   ================================================\n\n");
+
+		for (unsigned int i = 1; i <= *brojKlijenata - 1; i++) {
+			printf("ID:%u\n", (sviKlijenti + i)->id);
+			printf("Ime:%s\n", (sviKlijenti + i)->ime);
+			printf("Prezime:%s\n", (sviKlijenti + i)->prezime);
+			printf("Broj mobitela:%s\n", (sviKlijenti + i)->broj_mobitela);
+			printf("Datum placanja:%s\n\n\n", (sviKlijenti + i)->datum_placanja);
+		}
+		printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+		while (getchar() != '\n'); // option TWO to clean stdin
+		getchar(); // wait for ENTER
+		free(sviKlijenti);
+		free(temp);
+	}
+	system("cls");
+}
+
 void provjeraDatoteke(char* file, unsigned int* brojKlijenata) {
 
 	FILE* fp = fopen(file, "rb");
@@ -325,140 +387,6 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 	}
 }
 
-void sortiranje_izbornik() {		//ova funkcija pojednostavljuje izbornik za sortiranje, daje korisniku mogucnost izbora nacina sortiranja opet u switch caseu odabrani broj ucitava odredjenu funkciju
-	KLIJENTI* klijentii = NULL;
-	FILE* fileD = NULL;
-	char prvi_odabir, drugi_odabir;
-	//char odabir[30];
-
-	int brojKlijenata;
-	system("cls");
-
-	fileD = fopen("file.bin", "rb");
-	if (fileD == NULL) {
-		printf("\nGreska.\n");
-	}
-	else {
-		fread(&brojKlijenata, sizeof(int), 1, fileD); //citanje broja klijenata
-		klijentii = (KLIJENTI*)malloc(brojKlijenata * sizeof(KLIJENTI));
-		if (klijentii == NULL) {
-			printf("\nNesto je poslo po krivu!");
-		}
-		else {
-			fread(klijentii, sizeof(KLIJENTI), brojKlijenata, fileD);
-			system("cls");
-			printf("Odaberite nacin sortiranja:\n");
-			printf("1. Naziv dogadjaja\n2. Cijena\n3. Broj dostupnih mjesta\n4. Godina izdanja\n");
-			do {
-				prvi_odabir = _getch();
-			} while (prvi_odabir < '1' || prvi_odabir > '4');
-			//printf("Redoslijed:\n1. Uzlazno\n2. Silazno");
-			printf("Redoslijed: \n1. Od najmanje\n2. Od najvece");
-			do {
-				drugi_odabir = _getch();
-			} while (drugi_odabir < '1' || drugi_odabir > '2');
-
-			switch (prvi_odabir) {
-			case '1':
-				if (drugi_odabir == '1') {
-					sortiranje_po_imenu_uzlazno(klijentii, brojKlijenata);
-				}
-				else {
-					sortiranje_po_imenu_silazno(klijentii, brojKlijenata);
-				}
-				break;
-			}
-			fclose(fileD);
-			fileD = fopen("file.bin", "wb");
-			if (fileD == NULL) {
-				printf("\nNesto je poslo po krivu :(!");
-			}
-			else {
-				//ovdje azuriram datotku
-				fwrite(&brojKlijenata, sizeof(int), 1, fileD);
-				fwrite(klijentii, sizeof(KLIJENTI), brojKlijenata, fileD);
-				fclose(fileD);
-			}
-			free(klijentii);
-			klijentii = NULL;
-		}
-	}
-	printf("\n\nSortiranje uspjesno obavljeno. Za rezultate pogledajte kosaricu!");
-	printf("\nPritisnite bilo koju tipku za povratak...");
-	_getch();
-}
-void sortiranje_po_imenu_silazno(KLIJENTI* klijentii, unsigned int* brojKlijenata) {		//ova funkcija sortira silazno i uzlazno pomocu sortiranja biranjem, selection sort te onda updatea datoteku zamjenom 
-	KLIJENTI temp;																		// trenutnih datoteka imena, cijena, mjesta sa novim sortiranim
-	char prvo_slovo, prvo_slovo_pom;
-	int min;
-
-
-	for (int i = 0; i < brojKlijenata - 1; i++) {
-		min = i;
-		prvo_slovo = (klijentii + i)->ime[0] >= 'A' && (klijentii + i)->ime[0] <= 'Z' ? (klijentii + i)->ime[0] : (klijentii + i)->ime[0] - 32;
-		for (int j = i + 1; j < brojKlijenata; j++) {
-			prvo_slovo_pom = (klijentii + j)->ime[0] >= 'A' && (klijentii + j)->ime[0] <= 'Z' ? (klijentii + j)->ime[0] : (klijentii + j)->ime[0] - 32;
-			if (prvo_slovo < prvo_slovo_pom) {
-				min = j;
-				prvo_slovo = (klijentii + j)->ime[0] >= 'A' && (klijentii + j)->ime[0] <= 'Z' ? (klijentii + j)->ime[0] : (klijentii + j)->ime[0] - 32;
-			}
-		}
-		//zamjena imena klijenata
-		strcpy(temp.ime, (klijentii + i)->ime);
-		strcpy((klijentii + i)->ime, (klijentii + min)->ime);
-		strcpy((klijentii + min)->ime, temp.ime);
-		//zamjena cijene eventa
-		strcpy(temp.ime, (klijentii + i)->prezime);
-		strcpy((klijentii + i)->prezime, (klijentii + min)->prezime);
-		strcpy((klijentii + min)->prezime, temp.prezime);
-		//zamjena dostupnih ul eventa
-		strcpy(temp.broj_mobitela, (klijentii + i)->broj_mobitela);
-		strcpy((klijentii + i)->broj_mobitela, (klijentii + min)->broj_mobitela);
-		strcpy((klijentii + min)->broj_mobitela, temp.broj_mobitela);
-		//zamjena godine izdanja
-		strcpy(temp.datum_placanja, (klijentii + i)->datum_placanja);
-		strcpy((klijentii + i)->datum_placanja, (klijentii + min)->datum_placanja);
-		strcpy((klijentii + min)->datum_placanja, temp.datum_placanja);
-	}
-
-	return;
-}
-void sortiranje_po_imenu_uzlazno(KLIJENTI* klijentii, unsigned int* brojKlijenata) {		//ova funkcija sortira kao i prosla samo to radi u uzlaznom nacinu
-	KLIJENTI temp;
-	char prvo_slovo, prvo_slovo_pom;
-	int max;
-
-	for (int i = 0; i < brojKlijenata - 1; i++) {
-		max = i;
-		prvo_slovo = (klijentii + i)->ime[0] >= 'A' && (klijentii + i)->ime[0] <= 'Z' ? (klijentii + i)->ime[0] : (klijentii + i)->ime[0] - 32;
-		for (int j = i + 1; j < brojKlijenata; j++) {
-			prvo_slovo_pom = (klijentii + j)->ime[0] >= 'A' && (klijentii + j)->ime[0] <= 'Z' ? (klijentii + j)->ime[0] : (klijentii + j)->ime[0] - 32;
-			if (prvo_slovo > prvo_slovo_pom) {
-				max = j;
-				prvo_slovo = (klijentii + j)->ime[0] >= 'A' && (klijentii + j)->ime[0] <= 'Z' ? (klijentii + j)->ime[0] : (klijentii + j)->ime[0] - 32;
-			}
-		}
-		//zamjena imena eventa
-		strcpy(temp.ime, (klijentii + i)->ime);
-		strcpy((klijentii + i)->ime, (klijentii + max)->ime);
-		strcpy((klijentii + max)->ime, temp.ime);
-		//zamjena cijene eventa
-		strcpy(temp.ime, (klijentii + i)->prezime);
-		strcpy((klijentii + i)->prezime, (klijentii + max)->prezime);
-		strcpy((klijentii + max)->prezime, temp.prezime);
-		//zamjena dostupnih ul eventa
-		strcpy(temp.broj_mobitela, (klijentii + i)->broj_mobitela);
-		strcpy((klijentii + i)->broj_mobitela, (klijentii + max)->broj_mobitela);
-		strcpy((klijentii + max)->broj_mobitela, temp.broj_mobitela);
-		//zamjena godine izdanja
-		strcpy(temp.datum_placanja, (klijentii + i)->datum_placanja);
-		strcpy((klijentii + i)->datum_placanja, (klijentii + max)->datum_placanja);
-		strcpy((klijentii + max)->datum_placanja, temp.datum_placanja);
-	}
-
-	return;
-}
-
 void izlaz(void) {
 	printf("Da li ste sigurni da zelite zavrsiti program? [da/ne]: \n");
 	char odabir[3] = { '\0' };
@@ -480,7 +408,7 @@ void menu(char* file, unsigned int* brojKlijenata) {
 				\n(3)Pretraga klijenta po imenu\
 				\n(4)Izmjena podataka o klijentima\
                 \n(5)Brisanje datoteke s klijentima\
-				\n(6)Sortiranje\
+				\n(6)Sortiranje datoteke po datumu placanja\
 				\n(0)Zavrsetak programa\
                 \n******************************************|\n");
 		scanf("%d", &opcija);
@@ -507,7 +435,7 @@ void menu(char* file, unsigned int* brojKlijenata) {
 			break;
 		case 6:
 			system("cls");
-			sortiranje_izbornik();
+			sortiranje(file, brojKlijenata);
 			break;
 		case 0:
 			system("cls");
