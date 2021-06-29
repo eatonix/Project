@@ -17,6 +17,7 @@ void ispisKlijenata(char*, unsigned int*);
 void izlaz(void);
 void brisanjeDatoteke(char* file);
 void pretragaPoImenu(char* file, unsigned int* brojKlijenata);
+void pretragaPoID(char* file, unsigned int* brojKlijenata);
 void izmjenaPodataka(char* file , unsigned int* brojKlijenata);
 void sortiranje(char* file, unsigned int* brojKlijenata);
 
