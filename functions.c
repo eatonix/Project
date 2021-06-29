@@ -12,7 +12,7 @@ void provjeraDatoteke(char* file, unsigned int* brojKlijenata) {
 
 	if (fp == NULL) {
 
-		perror("Datoteka ne postoji\n");
+		perror("Kreiranje koristnika\n");
 
 		fp = fopen(file, "wb");
 
@@ -139,7 +139,7 @@ void brisanjeDatoteke(char* file) {
 		printf("            Brisanje datoteke\n");
 		printf("\n   ================================================\n\n");
 
-		printf("       Zelite li obrisati datoteku kupci.bin?");
+		printf("       Zelite li obrisati datoteku file.bin?");
 		printf("\n\n	(1.) Da");
 		printf("\n	(2.) Ne");
 
@@ -342,7 +342,7 @@ void sortiranje_izbornik() {		//ova funkcija pojednostavljuje izbornik za sortir
 		fread(&brojKlijenata, sizeof(int), 1, fileD); //citanje broja klijenata
 		klijentii = (KLIJENTI*)malloc(brojKlijenata * sizeof(KLIJENTI));
 		if (klijentii == NULL) {
-			printf("\nNesto je poslo po krivu :(!");
+			printf("\nNesto je poslo po krivu!");
 		}
 		else {
 			fread(klijentii, sizeof(KLIJENTI), brojKlijenata, fileD);
