@@ -1,6 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
 
+
 typedef struct klijenti {
 	int id;
 	int broj_klijenata;
@@ -17,8 +18,7 @@ void izlaz(void);
 void brisanjeDatoteke(char* file);
 void pretragaPoImenu(char* file, unsigned int* brojKlijenata);
 void izmjenaPodataka(char* file , unsigned int* brojKlijenata);
-void sortiranje_po_imenu_silazno(KLIJENTI* klijentii, unsigned int* brojKlijenata);
-void sortiranje_po_imenu_uzlazno(KLIJENTI* klijentii, unsigned int* brojKlijenata);
+void sortiranje(char* file, unsigned int* brojKlijenata);
 
 #endif HEADER_H
 
