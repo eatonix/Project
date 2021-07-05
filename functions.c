@@ -352,13 +352,17 @@ void pretragaPoImenu(char* file, unsigned int* brojKlijenata) {
 					printf("Ime: %s\n", (sviKlijenti + indeksPronalaska)->ime);
 					printf("Prezime: %s\n", (sviKlijenti + indeksPronalaska)->prezime);
 					printf("Broj mobitela: %s\n", (sviKlijenti + indeksPronalaska)->broj_mobitela);;
-					int pom;
-					scanf("%d", &pom);
+					printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+					while (getchar() != '\n'); // option TWO to clean stdin
+					getchar(); // wait for ENTER
+					system("cls");
 				}
 				else {
-					int pom;
 					printf("Nepostojeci korisnik\n");
-					scanf("%d", &pom);
+					printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+					while (getchar() != '\n'); // option TWO to clean stdin
+					getchar(); // wait for ENTER
+					system("cls");
 				}
 				free(sviKlijenti);
 			}
@@ -424,6 +428,7 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 					printf("          %s ", (sviKlijenti + indeksPronalaska)->ime);
 					printf("          %s ", (sviKlijenti + indeksPronalaska)->prezime);
 					printf("          %s", (sviKlijenti + indeksPronalaska)->broj_mobitela);
+					printf("          %s", (sviKlijenti + indeksPronalaska)->datum_placanja);
 					fclose(citanjeDatoteke);
 					citanjeDatoteke = fopen(file, "rb+");
 
@@ -440,6 +445,8 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 					scanf("%9s", privremeniBroj);
 					strcpy(privremeniKlijenti.broj_mobitela, "+385");
 					strcat(privremeniKlijenti.broj_mobitela, privremeniBroj);
+					printf("          Novi datum placanja: ");
+					scanf(" %50[^\n]", privremeniKlijenti.datum_placanja);
 					privremeniKlijenti.id = indeksPronalaska;
 
 					fseek(citanjeDatoteke, sizeof(unsigned int) + ((indeksPronalaska) * sizeof(KLIJENTI)), SEEK_SET);
@@ -447,15 +454,17 @@ void izmjenaPodataka(char* file, unsigned int* brojKlijenata) {
 					rewind(citanjeDatoteke);
 					fwrite(brojKlijenata, sizeof(unsigned int), 1, citanjeDatoteke);
 					fclose(citanjeDatoteke);
-					int pom;
-					printf("\n\nPritisnite bilo koju tipku za nastavak: ");
-					scanf("%d", &pom);
+					printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+					while (getchar() != '\n'); // option TWO to clean stdin
+					getchar(); // wait for ENTER
+					system("cls");
 				}
 				else {
-					int pom;
 					printf("          Nepostojeci korisnik\n");
-					printf("\n\n          Unesite bilo koji broj za nastavak: ");
-					scanf("%d", &pom);
+					printf("\nPritisnite [Enter] kako biste se vratili u izbornik.\n");
+					while (getchar() != '\n'); // option TWO to clean stdin
+					getchar(); // wait for ENTER
+					system("cls");
 				}
 				free(sviKlijenti);
 			}
@@ -482,7 +491,7 @@ void menu(char* file, unsigned int* brojKlijenata) {
                 \n(1)Unos novog klijenta\
                 \n(2)Ispis svih klijenata\
 				\n(3)Pretraga klijenta po imenu\
-				\n(4)Pretraga klijenta po imenu\
+				\n(4)Pretraga klijenta po ID\
 				\n(5)Izmjena podataka o klijentima\
                 \n(6)Brisanje datoteke s klijentima\
 				\n(7)Sortiranje datoteke po datumu placanja\
